@@ -36,6 +36,7 @@ import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.ev3.SoundSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.runtime.Utils;
+import de.fhg.iais.roberta.runtime.ev3.http.HTTPClient;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import lejos.hardware.ev3.EV3;
 import lejos.hardware.ev3.LocalEV3;
@@ -1599,12 +1600,17 @@ public class Hal {
      * @param bluetoothConnection
      * @return the message or "NO MESSAGE"
      */
-    public String readMessage(NXTConnection bluetoothConnection) {
+    public String readBluetoothMessage(NXTConnection bluetoothConnection) {
         String message = "NO MESSAGE";
         if ( bluetoothConnection != null ) {
             message = this.blueCom.readMessage(bluetoothConnection);
         }
         return message;
+    }
+
+    public String readHTTPMessage(String url) {
+        // TODO: Implement server to receive message
+        return "not implemented yet";
     }
 
     /**
@@ -1613,10 +1619,14 @@ public class Hal {
      * @param message the message to be sent
      * @param bluetoothConnection
      */
-    public void sendMessage(String message, NXTConnection bluetoothConnection) {
+    public void sendBluetoothMessage(String message, NXTConnection bluetoothConnection) {
         if ( bluetoothConnection != null ) {
             this.blueCom.sendTo(bluetoothConnection, message);
         }
+    }
+
+    public void sendHTTPMessage(String message, String url) {
+        HTTPClient.sendPOST(message, url);
     }
 
     private int toDegPerSec(float speedPercent) {
