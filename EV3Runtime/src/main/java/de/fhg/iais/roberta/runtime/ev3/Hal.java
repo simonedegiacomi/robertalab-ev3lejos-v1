@@ -37,6 +37,7 @@ import de.fhg.iais.roberta.mode.sensor.ev3.SoundSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.runtime.Utils;
 import de.fhg.iais.roberta.runtime.ev3.http.HTTPClient;
+import de.fhg.iais.roberta.runtime.ev3.http.HTTPServer;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import lejos.hardware.ev3.EV3;
 import lejos.hardware.ev3.LocalEV3;
@@ -1608,9 +1609,13 @@ public class Hal {
         return message;
     }
 
+    /**
+     * Reads a message received in a HTTP POST
+     * @param url The url from which receive the HTTP POST
+     * @return the message, "MESSAGE ERROR" or "NO MESSAGE"
+     */
     public String readHTTPMessage(String url) {
-        // TODO: Implement server to receive message
-        return "not implemented yet";
+        return HTTPServer.readMessageAndClose(url);
     }
 
     /**
@@ -1625,6 +1630,11 @@ public class Hal {
         }
     }
 
+    /**
+     * Send a message using a HTTP POST request
+     * @param message the message to be sent
+     * @param url
+     */
     public void sendHTTPMessage(String message, String url) {
         HTTPClient.sendPOST(message, url);
     }
